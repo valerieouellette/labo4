@@ -172,3 +172,30 @@ class LogicielMagasin:
             else:
                 self.inventaire_quantite[jeu] = 1
     
+    def afficher_inventaire(self):
+        for quantite, jeu in self.inventaire_quantite.items():
+            print(f"{quantite} {str(jeu)}")
+
+
+    def menu(self):
+        menu = {}
+        menu[1] = "Effectuer une vente."
+        menu[2] = "Effectuer un retour."
+        menu[3] = "Afficher l'inventaire."
+        menu[4] = "Quitter"
+
+        quitting = False
+        while not quitting:
+            for numero, option in menu.items():
+                print(f"{numero}) {option}")
+            
+            choix = input("Votre choix: ")
+            if choix == "1":
+                pass
+            elif choix == "2":
+                pass
+            elif choix == "3":
+                self.afficher_inventaire()
+            elif choix == "4":
+                quitting = True
+    
