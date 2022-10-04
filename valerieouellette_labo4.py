@@ -1,35 +1,37 @@
 class Jeu:
-    pass
+    
+    def __init__(self):
+        self.contenu = ""
 
-class JeuCartes:
+class JeuCartes(Jeu):
 
     NOM = "cartes"
 
     def __init__(self):
         pass
 
-class JeuStategie:
+class JeuStategie(Jeu):
     
     NOM = "stategie"
 
     def __init__(self):
         pass
 
-class JeuRole:
+class JeuRole(Jeu):
     
     NOM = "role"
 
     def __init__(self):
         pass
 
-class JeuMemoire:
+class JeuMemoire(Jeu):
     
     NOM = "memoire"
 
     def __init__(self):
         pass
 
-class JeuDes:
+class JeuDes(Jeu):
     
     NOM = "des"
 
@@ -38,8 +40,18 @@ class JeuDes:
 
 class PochettePlastique:
     
+    def __init__(self, couleur):
+        self.couleur = couleur
+
+class Tournoi:
+
     def __init__(self):
-        pass
+        self.liste_tournois = []
+
+class Documentation:
+
+    def __init__(self):
+        self.description = ""
 
 class LogicielMagasin:
     
