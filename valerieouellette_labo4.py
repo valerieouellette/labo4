@@ -142,6 +142,11 @@ class LogicielMagasin:
         self.telecharger_bd()
         self.quantite_inventaire()
     
+    def __str__(self) -> str:
+        str_inventaire = ""
+        for jeu in self.inventaire:
+            str_inventaire += str(jeu) + "\n"
+    
     def telecharger_bd(self):
         f = open("data.txt", "r", encoding="utf-8")
         lignes = f.readlines()
