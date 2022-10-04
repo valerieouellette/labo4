@@ -23,12 +23,39 @@ class JeuCartes(Jeu):
         couleur_pochette = input("Quel couleur pour la pochette? ")
         self.pochette.couleur = couleur_pochette
 
+class JokRUmmy(JeuCartes):
+
+    NOM = "jok-r-ummy"
+
+    def __init__(self):
+        super().__init__()
+        self.prix = 20
+        self.description = "Nouvelle édition"
+
 class JeuStategie(Jeu):
     
     NOM = "stategie"
 
     def __init__(self):
         super().__init__()
+
+class Echecs(JeuStategie):
+
+    NOM = "echecs"
+
+    def __init__(self):
+        super().__init__()
+        self.prix = 50
+        self.description = "Jeu d'échecs en bois"
+
+class Monopoly(JeuStategie):
+
+    NOM = "monopoly"
+
+    def __init__(self):
+        super().__init__()
+        self.prix = 30
+        self.description = "Jeu Monopoly Monde"
 
 class JeuRole(Jeu):
     
@@ -37,12 +64,32 @@ class JeuRole(Jeu):
     def __init__(self):
         super().__init__()
 
+class LoupsGarous(JeuRole):
+
+    NOM = "loups-garous"
+
+    def __init__(self):
+        super().__init__()
+        self.prix = 15
+        self.description = "Édition spécial"
+
+class DonjonDragon(JeuRole):
+
+    NOM = "donjon-dragon"
+
+    def __init__(self):
+        super().__init__()
+        self.prix = 20
+        self.description = "Jeu classique de donjon et dragon"
+
 class JeuMemoire(Jeu):
     
     NOM = "memoire"
 
     def __init__(self):
         super().__init__()
+        self.prix = 15
+        self.description = "Jeu de mémoire pour les 8 ans et plus"
 
 class JeuDes(Jeu):
     
@@ -50,6 +97,8 @@ class JeuDes(Jeu):
 
     def __init__(self):
         super().__init__()
+        self.prix = 10
+        self.description = "Ensemble de dés à jouer"
 
 class PochettePlastique:
     
