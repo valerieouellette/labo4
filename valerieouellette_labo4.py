@@ -1,104 +1,134 @@
 class Jeu:
-
-    NOM = ""
     
     def __init__(self):
+        self.type = ""
+        self.nom = ""
         self.prix = 0
-        self.description = ""
 
     def __str__(self) -> str:
-        return f"{Jeu.NOM}, {self.description}, {self.prix}"
+        return f"{self.type}, {self.nom}, {self.prix}"
 
 class JeuCartes(Jeu):
 
-    NOM = "cartes"
-
     def __init__(self):
         super().__init__()
-        self.prix = 10
-        self.description = "Jeu de 54 cartes classique"
-        self.pochette = PochettePlastique()
+        self.type = "Cartes"
+        self.pochette = None
     
     def achat(self):
         couleur_pochette = input("Quel couleur pour la pochette? ")
-        self.pochette.couleur = couleur_pochette
+        self.pochette = PochettePlastique(couleur_pochette)
+
+class CartesClassique(JeuCartes):
+
+    def __init__(self):
+        super().__init__()
+        self.nom = "Cartes classique"
+        self.prix = 10
 
 class JokRUmmy(JeuCartes):
 
-    NOM = "jok-r-ummy"
+    def __init__(self):
+        super().__init__()
+        self.nom = "Jok-r-ummy"
+        self.prix = 20
+
+class Uno(JeuCartes):
 
     def __init__(self):
         super().__init__()
-        self.prix = 20
-        self.description = "Nouvelle édition"
+        self.nom = "Uno"
+        self.prix = 10
 
 class JeuStategie(Jeu):
-    
-    NOM = "stategie"
 
     def __init__(self):
         super().__init__()
+        self.type = "Statégie"
 
 class Echecs(JeuStategie):
 
-    NOM = "echecs"
-
     def __init__(self):
         super().__init__()
+        self.nom = "Échecs"
         self.prix = 50
-        self.description = "Jeu d'échecs en bois"
 
-class Monopoly(JeuStategie):
-
-    NOM = "monopoly"
+class Dames(JeuStategie):
 
     def __init__(self):
         super().__init__()
+        self.nom = "Dames"
         self.prix = 30
-        self.description = "Jeu Monopoly Monde"
+
+class Backgammon(JeuStategie):
+
+    def __init__(self):
+        super().__init__()
+        self.nom = "Backgammon"
+        self.prix = 30
 
 class JeuRole(Jeu):
     
-    NOM = "role"
+    def __init__(self):
+        super().__init__()
+        self.type = "Rôle"
+        self.documentation = ""
+
+class LoupGarou(JeuRole):
 
     def __init__(self):
         super().__init__()
-
-class LoupsGarous(JeuRole):
-
-    NOM = "loups-garous"
-
-    def __init__(self):
-        super().__init__()
+        self.nom = "Loup-Garou"
         self.prix = 15
-        self.description = "Édition spécial"
+        self.documentation = "https://www.regledujeu.fr/loup-garou-regle/"
 
 class DonjonDragon(JeuRole):
 
-    NOM = "donjon-dragon"
-
     def __init__(self):
         super().__init__()
-        self.prix = 20
-        self.description = "Jeu classique de donjon et dragon"
+        self.nom = "Donjon & Dragon"
+        self.prix = 45
+        self.documentation = "https://donjonetdragon.fr/wp-content/uploads/2022/03/Donjon-et-dragon-PDF-re%CC%80gles.pdf"
 
 class JeuMemoire(Jeu):
-    
-    NOM = "memoire"
 
     def __init__(self):
         super().__init__()
+        self.type = "Mémoire"
+
+class MemoireEnfant(JeuMemoire):
+
+    def __init__(self):
+        super().__init__()
+        self.nom = "Mémoire Licornes - enfants"
         self.prix = 15
-        self.description = "Jeu de mémoire pour les 8 ans et plus"
 
-class JeuDes(Jeu):
-    
-    NOM = "des"
+class MemoireTelecospique(JeuMemoire):
 
     def __init__(self):
         super().__init__()
-        self.prix = 10
-        self.description = "Ensemble de dés à jouer"
+        self.nom = "Mémoire télécospique"
+        self.prix = 35
+
+class JeuConnaissance(Jeu):
+
+    def __init__(self):
+        super().__init__()
+        self.type = "Connaissance"
+
+class GeniesenHerbes(JeuConnaissance):
+
+    def __init__(self):
+        super().__init__()
+        self.nom = "Génies en herbe"
+        self.prix = 40
+
+class DefisNature(JeuConnaissance):
+
+    def __init__(self):
+        super().__init__()
+        self.nom = "Défis Nature"
+        self.prix = 20
 
 class PochettePlastique:
     
@@ -128,12 +158,6 @@ class Tournoi:
         else:
             pass
 
-
-class Documentation:
-
-    def __init__(self):
-        self.description = ""
-
 class LogicielMagasin:
     
     def __init__(self):
@@ -143,26 +167,54 @@ class LogicielMagasin:
         self.quantite_inventaire()
     
     def __str__(self) -> str:
-        str_inventaire = ""
-        for jeu in self.inventaire:
-            str_inventaire += str(jeu) + "\n"
+        inventaire_str = ""
+        for quantite, jeu in self.inventaire_quantite.items():
+            inventaire_str += (f"{str(jeu.nom)}:{quantite}\n")
+        return inventaire_str
     
     def telecharger_bd(self):
         f = open("data.txt", "r", encoding="utf-8")
         lignes = f.readlines()
         for ligne in lignes:
-            ligne = ligne.split(",")
+            ligne = ligne.split(":")
             nom = ligne[0]
-            if nom == "cartes":
-                self.inventaire.append(JeuCartes())
-            elif nom == "stategie":
-                self.inventaire.append(JeuStategie())
-            elif nom == "role":
-                self.inventaire.append(JeuRole())
-            elif nom == "memoire":
-                self.inventaire.append(JeuMemoire())
-            elif nom == "des":
-                self.inventaire.append(JeuDes())
+            quantite = int(ligne[1])
+            if nom == "Cartes classique":
+                for i in range(quantite):
+                    self.inventaire.append(CartesClassique())
+            elif nom == "Jok-r-ummy":
+                for i in range(quantite):
+                    self.inventaire.append(JokRUmmy())
+            elif nom == "Uno":
+                for i in range(quantite):
+                    self.inventaire.append(Uno())
+            elif nom == "Échecs":
+                for i in range(quantite):
+                    self.inventaire.append(Echecs())
+            elif nom == "Dames":
+                for i in range(quantite):
+                    self.inventaire.append(Dames())
+            elif nom == "Backgammon":
+                for i in range(quantite):
+                    self.inventaire.append(Backgammon())
+            elif nom == "Loup-Garou":
+                for i in range(quantite):
+                    self.inventaire.append(LoupGarou())
+            elif nom == "Donjon & Dragon":
+                for i in range(quantite):
+                    self.inventaire.append(DonjonDragon())
+            elif nom == "Mémoire Licornes - enfants":
+                for i in range(quantite):
+                    self.inventaire.append(MemoireEnfant())
+            elif nom == "Mémoire télécospique":
+                for i in range(quantite):
+                    self.inventaire.append(MemoireTelecospique())
+            elif nom == "Génies en herbe":
+                for i in range(quantite):
+                    self.inventaire.append(GeniesenHerbes())
+            elif nom == "Défis Nature":
+                for i in range(quantite):
+                    self.inventaire.append(DefisNature())
         f.close()
     
     def quantite_inventaire(self):
@@ -172,9 +224,9 @@ class LogicielMagasin:
             else:
                 self.inventaire_quantite[jeu] = 1
     
-    def afficher_inventaire(self):
-        for quantite, jeu in self.inventaire_quantite.items():
-            print(f"{quantite} {str(jeu)}")
+    def afficher_jeux(self):
+        for jeu in self.inventaire:
+            print(str(jeu))
 
 
     def menu(self):
@@ -195,7 +247,7 @@ class LogicielMagasin:
             elif choix == "2":
                 pass
             elif choix == "3":
-                self.afficher_inventaire()
+                print(self)
             elif choix == "4":
                 quitting = True
     
