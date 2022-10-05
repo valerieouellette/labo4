@@ -78,7 +78,7 @@ class JeuStategie(Jeu):
         choix = input("Si vous voulez vous inscrire à un tournoi, tapez 'y': ")
         if choix == "y":
             tournoi = Tournoi.inscription_tournoi(self.nom)
-            date_tournoi = tournoi.date.strftime("%m/%d/%Y, %H:%M")
+            date_tournoi = tournoi.date.strftime("%d/%m/%Y") + " 19:00"
             print(f"La date du tournoi est: {date_tournoi}")
         else:
             print("Aucune inscription faite.")
@@ -197,29 +197,26 @@ class Tournoi:
     def inscription_tournoi(nom_jeu):
         nom_participant = input("Entrez votre nom: ")
         courriel = input("Entrez votre courriel: ")
-        if len(Tournoi.LISTE_TOURNOIS) == 0:
+
+        liste_noms_tournois = []
+        for tournoi in Tournoi.LISTE_TOURNOIS:
+            liste_noms_tournois.append(tournoi.nom)
+        
+        if nom_jeu not in liste_noms_tournois:
             date = Tournoi.random_date()
             tournoi = Tournoi(nom_jeu, date)
             Tournoi.LISTE_TOURNOIS.append(tournoi)
             tournoi.participants.append((nom_participant, courriel))
             return tournoi
         else:
-            for tournoi in Tournoi.LISTE_TOURNOIS:
-                    if tournoi.nom == nom_jeu:
-                        tournoi.participants.append((nom_participant, courriel))
-                        return tournoi
-                    else:
-                        date = Tournoi.random_date()
-                        tournoi = Tournoi(nom_jeu, date)
-                        Tournoi.LISTE_TOURNOIS.append(tournoi)
-                        tournoi.participants.append((nom_participant, courriel))
-                        return tournoi
+            for tournoi in Tournoi.LISTE_TOURNOIS:  
+                if tournoi.nom == nom_jeu:
+                    tournoi.participants.append((nom_participant, courriel))
+                    return tournoi
 
     @staticmethod
     def random_date():
         today = datetime.now()
-        today.hour = 19
-        today.min = 0
         nb_jour = randint(1,30)
         jour_tournoi = today + timedelta(hours=(24*nb_jour), minutes=0)
         return jour_tournoi
