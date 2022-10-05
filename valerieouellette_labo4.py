@@ -18,7 +18,7 @@ class Jeu:
         self.inventaire = inventaire
 
     def __str__(self) -> str:
-        return f"Type: {self.type}, Nom: {self.nom}, Prix: {self.prix}$, Inventaire: {self.inventaire}"
+        return f"Type: {self.type}, Nom: {self.nom}, Prix: ${self.prix}, Inventaire: {self.inventaire}"
     
     def achat(self):
         pass
