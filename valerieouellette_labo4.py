@@ -1,6 +1,13 @@
 from datetime import datetime, timedelta
 from random import randint
 
+'''
+Source: https://stackoverflow.com/questions/21208376/converting-float-to-dollars-and-cents
+User: Justin O Barber
+Utilisation: Comment convertir un float en format dollars et cents (argent). Utilisé dans les fonctions vente et retour (class LogicielMagasin)
+pour afficher le prix total.
+'''
+
 
 class Jeu:
     
@@ -148,7 +155,7 @@ class JeuMemoire(Jeu):
         self.activite = ""
     
     def achat(self):
-        print(f"Nous vous invitons à nos activités 'Travaillons la mémoire' ayant lieu:\n {self.activite}")
+        print(f"Nous vous invitons à nos activités 'Travaillons la mémoire' ayant lieu:\n{self.activite}")
 
 
 class MemoireEnfant(JeuMemoire):
@@ -252,6 +259,8 @@ class Tournoi:
 
 
 class LogicielMagasin:
+
+    TAX = 0.15
     
     def __init__(self):
         self.inventaire = []
@@ -326,7 +335,9 @@ class LogicielMagasin:
                 jeu_vente.achat(self.inventaire, quantite_vendu)
             else:
                 jeu_vente.achat()
-            print("Vente réussie")
+            prix_total = jeu_vente.prix * quantite_vendu * (1 + LogicielMagasin.TAX)
+            prix_total = '${:,.2f}'.format(prix_total)
+            print(f"Le prix total de la vente est: {prix_total}")
         else:
             print("Impossible, inventaire insuffisant")
 
@@ -338,7 +349,9 @@ class LogicielMagasin:
 
         jeu_retour = self.inventaire[choix_retour-1]
         jeu_retour.inventaire += quantite_retour
-        print("Retour réussi")
+        prix_total = jeu_retour.prix * quantite_retour * (1 + LogicielMagasin.TAX)
+        prix_total = '${:,.2f}'.format(prix_total)
+        print(f"Le prix total à rembourser est: {prix_total}")
 
 
     def menu(self):
