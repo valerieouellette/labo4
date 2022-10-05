@@ -172,6 +172,14 @@ class JeuConnaissance(Jeu):
     def __init__(self, inventaire):
         super().__init__(inventaire)
         self.type = "Connaissance"
+    
+    def achat(self):
+        today = datetime.now()
+        date_month = today.month + 1
+        date = datetime(today.year, date_month, 1)
+        date = date.strftime("%d/%m/%Y")
+        print("Voici un coupon pour un concours. Vous courrez la chance de gagner un jeu de connaissance gratuit.")
+        print(f"Le prochain tirage a lieu le: {date}")
 
 class GeniesenHerbes(JeuConnaissance):
 
@@ -197,6 +205,10 @@ class PochettePlastique:
     def __str__(self) -> str:
         return f"Nom: {self.nom}, Couleur: {self.couleur}, Inventaire: {self.inventaire}"
 
+class Concours:
+
+    def __init__(self, date) -> None:
+        self.date = date
 
 class Tournoi:
 
