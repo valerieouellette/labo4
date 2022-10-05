@@ -1,3 +1,7 @@
+from datetime import datetime, timedelta
+from random import randint
+
+
 class Jeu:
     
     def __init__(self, inventaire):
@@ -23,7 +27,7 @@ class JeuCartes(Jeu):
         choix = False
         while not choix:
             print("Quelle couleur voulez-vous pour la pochette?")
-            print("1) Rouge \n 2) Bleu")
+            print("1) Rouge \n2) Bleu")
             choix_couleur = input("Votre choix(1-2): ")
             if choix_couleur == "1":
                 choix_couleur = "rouge"
@@ -67,7 +71,18 @@ class JeuStategie(Jeu):
 
     def __init__(self, inventaire):
         super().__init__(inventaire)
+        self.nom = ""
         self.type = "Statégie"
+    
+    def achat(self):
+        choix = input("Si vous voulez vous inscrire à un tournoi, tapez 'y': ")
+        if choix == "y":
+            tournoi = Tournoi.inscription_tournoi(self.nom)
+            date_tournoi = tournoi.date.strftime("%m/%d/%Y, %H:%M")
+            print(f"La date du tournoi est: {date_tournoi}")
+        else:
+            print("Aucune inscription faite.")
+
 
 class Echecs(JeuStategie):
 
@@ -96,6 +111,9 @@ class JeuRole(Jeu):
         super().__init__(inventaire)
         self.type = "Rôle"
         self.documentation = ""
+    
+    def achat(self):
+        print(f"Ici le lien vers la documentation: {self.documentation}")
 
 class LoupGarou(JeuRole):
 
@@ -176,15 +194,35 @@ class Tournoi:
         return f"{self.nom}: {self.date}"
     
     @staticmethod
-    def inscription_tournoi():
-        nom = input("Entrez votre nom: ")
+    def inscription_tournoi(nom_jeu):
+        nom_participant = input("Entrez votre nom: ")
         courriel = input("Entrez votre courriel: ")
         if len(Tournoi.LISTE_TOURNOIS) == 0:
-            tournoi = Tournoi()
+            date = Tournoi.random_date()
+            tournoi = Tournoi(nom_jeu, date)
             Tournoi.LISTE_TOURNOIS.append(tournoi)
-            tournoi.participants.append((nom, courriel))
+            tournoi.participants.append((nom_participant, courriel))
+            return tournoi
         else:
-            pass
+            for tournoi in Tournoi.LISTE_TOURNOIS:
+                    if tournoi.nom == nom_jeu:
+                        tournoi.participants.append((nom_participant, courriel))
+                        return tournoi
+                    else:
+                        date = Tournoi.random_date()
+                        tournoi = Tournoi(nom_jeu, date)
+                        Tournoi.LISTE_TOURNOIS.append(tournoi)
+                        tournoi.participants.append((nom_participant, courriel))
+                        return tournoi
+
+    @staticmethod
+    def random_date():
+        today = datetime.now()
+        today.hour = 19
+        today.min = 0
+        nb_jour = randint(1,30)
+        jour_tournoi = today + timedelta(hours=(24*nb_jour), minutes=0)
+        return jour_tournoi
 
 class LogicielMagasin:
     
@@ -247,14 +285,19 @@ class LogicielMagasin:
 
     def vente(self):
         for numero, jeu in enumerate(self.inventaire):
-            print(f"{numero+1}) {jeu}")
+            if jeu.nom != "Pochette plastique":
+                print(f"{numero+1}) {jeu}")
         
-        choix_vente = int(input(f"Article de la vente(1-{len(self.inventaire)}): "))
+        choix_vente = int(input(f"Article de la vente(1-{len(self.inventaire)-2}): "))
         quantite_vendu = int(input("Quantité vendu: "))
 
         jeu_vente = self.inventaire[choix_vente-1]
         if jeu_vente.inventaire >= quantite_vendu:
             jeu_vente.inventaire -= quantite_vendu
+            if jeu_vente.type == "Cartes":
+                jeu_vente.achat(self.inventaire)
+            else:
+                jeu_vente.achat()
             print("Vente réussie")
         else:
             print("Impossible, inventaire insuffisant")
