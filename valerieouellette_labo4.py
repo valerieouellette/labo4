@@ -8,6 +8,9 @@ class Jeu:
 
     def __str__(self) -> str:
         return f"Type: {self.type}, Nom: {self.nom}, Prix: {self.prix}$, Inventaire: {self.inventaire}"
+    
+    def achat(self):
+        pass
 
 class JeuCartes(Jeu):
 
@@ -16,9 +19,28 @@ class JeuCartes(Jeu):
         self.type = "Cartes"
         self.pochette = None
     
-    def achat(self):
-        couleur_pochette = input("Quel couleur pour la pochette? ")
-        self.pochette = PochettePlastique(couleur_pochette)
+    def achat(self, inventaire_magasin):
+        choix = False
+        while not choix:
+            print("Quelle couleur voulez-vous pour la pochette?")
+            print("1) Rouge \n 2) Bleu")
+            choix_couleur = input("Votre choix(1-2): ")
+            if choix_couleur == "1":
+                choix_couleur = "rouge"
+                choix = True
+            elif choix_couleur == "2":
+                choix_couleur = "bleu"
+                choix = True
+            else:
+                print("Choix invalide.")
+
+        for article in inventaire_magasin:
+            if article.nom == "Pochette plastique" and article.couleur == choix_couleur:
+                if article.inventaire > 0:
+                    article.inventaire -= 1
+                else:
+                    print("Malheureusement, il ne nous reste plus de pochette plastique.")
+
 
 class CartesClassique(JeuCartes):
 
@@ -133,8 +155,13 @@ class DefisNature(JeuConnaissance):
 
 class PochettePlastique:
     
-    def __init__(self, couleur):
+    def __init__(self, couleur, inventaire):
+        self.nom = "Pochette plastique"
         self.couleur = couleur
+        self.inventaire = inventaire
+    
+    def __str__(self) -> str:
+        return f"Nom: {self.nom}, Couleur: {self.couleur}, Inventaire: {self.inventaire}"
 
 class Tournoi:
 
@@ -163,6 +190,7 @@ class LogicielMagasin:
     
     def __init__(self):
         self.inventaire = []
+        self.dico_jeux = self.definitions()
         self.telecharger_bd()
     
     def definitions(self):
@@ -178,7 +206,8 @@ class LogicielMagasin:
             "Mémoire Licornes - enfants" : MemoireEnfant,
             "Mémoire télécospique" : MemoireTelecospique,
             "Génies en herbe" : GeniesenHerbes,
-            "Défis Nature" : DefisNature
+            "Défis Nature" : DefisNature,
+            "Pochette plastique" : PochettePlastique
         }
     
     def __str__(self) -> str:
@@ -193,17 +222,24 @@ class LogicielMagasin:
         for ligne in lignes:
             ligne = ligne.split(":")
             nom = ligne[0]
-            quantite = int(ligne[1])
-            dico_jeu = self.definitions()
-            for nom_cle in dico_jeu.keys():
-                if nom == nom_cle:
-                    self.inventaire.append(dico_jeu[nom_cle](quantite))
+            if nom == "Pochette plastique":
+                couleur = ligne[1]
+                quantite = int(ligne[2])
+                self.inventaire.append(self.dico_jeux[nom](couleur, quantite))
+            else:
+                quantite = int(ligne[1])
+                for nom_cle in self.dico_jeux.keys():
+                    if nom == nom_cle:
+                        self.inventaire.append(self.dico_jeux[nom_cle](quantite))
         f.close()
     
     def ecrire_bd(self):
         str_bd_jeu = ""
-        for jeu in self.inventaire:
-            str_bd_jeu += f"{jeu.nom}:{jeu.inventaire}\n"
+        for article in self.inventaire:
+            if article.nom == "Pochette plastique":
+                str_bd_jeu += f"{article.nom}:{article.couleur}:{article.inventaire}\n"
+            else:
+                str_bd_jeu += f"{article.nom}:{article.inventaire}\n"
         f = open("data.txt", "w", encoding="utf-8")
         f.write(str_bd_jeu)
         f.close()
@@ -216,15 +252,25 @@ class LogicielMagasin:
         choix_vente = int(input(f"Article de la vente(1-{len(self.inventaire)}): "))
         quantite_vendu = int(input("Quantité vendu: "))
 
-        jeu = self.inventaire[choix_vente-1]
-        if jeu.inventaire >= quantite_vendu:
-            jeu.inventaire -= quantite_vendu
+        jeu_vente = self.inventaire[choix_vente-1]
+        if jeu_vente.inventaire >= quantite_vendu:
+            jeu_vente.inventaire -= quantite_vendu
             print("Vente réussie")
         else:
             print("Impossible, inventaire insuffisant")
 
+
     def retour(self):
-        pass
+        for numero, jeu in enumerate(self.inventaire):
+            print(f"{numero+1}) {jeu}")
+        
+        choix_retour = int(input(f"Article à retourner(1-{len(self.inventaire)}): "))
+        quantite_retour = int(input("Quantité retournée: "))
+
+        jeu_retour = self.inventaire[choix_retour-1]
+        jeu_retour.inventaire += quantite_retour
+        print("Retour réussi")
+
 
     def menu(self):
         menu = {}

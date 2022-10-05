@@ -5,8 +5,10 @@ Uno:3
 Dames:4
 Backgammon:3
 Loup-Garou:5
-Donjon & Dragon:2
-Mémoire Licornes - enfants:4
+Donjon & Dragon:3
+Mémoire Licornes - enfants:3
 Mémoire télécospique:3
 Génies en herbe:5
 Défis Nature:7
+Pochette plastique:bleu:20
+Pochette plastique:rouge:25
