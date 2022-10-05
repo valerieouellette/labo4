@@ -23,7 +23,7 @@ class JeuCartes(Jeu):
         self.type = "Cartes"
         self.pochette = None
     
-    def achat(self, inventaire_magasin):
+    def achat(self, inventaire_magasin, quantite):
         choix = False
         while not choix:
             print("Quelle couleur voulez-vous pour la pochette?")
@@ -40,11 +40,17 @@ class JeuCartes(Jeu):
 
         for article in inventaire_magasin:
             if article.nom == "Pochette plastique" and article.couleur == choix_couleur:
-                if article.inventaire > 0:
-                    article.inventaire -= 1
+                if article.inventaire >= quantite:
+                    article.inventaire -= quantite
                 else:
-                    print("Malheureusement, il ne nous reste plus de pochette plastique.")
+                    if article.inventaire == 0:
+                        print(f"Malheureusement, il ne nous reste aucune pochette plastique de cette couleur en stock.")
+                    elif article.inventaire == 1:
+                        print(f"Malheureusement, il ne nous reste qu'une pochette plastique de cette couleur en stock.")
+                    else:
+                        print(f"Malheureusement, il nous reste seulement {article.inventaire} pochettes plastique de cette couleur en stock.")
 
+                    article.inventaire = 0
 
 class CartesClassique(JeuCartes):
 
@@ -279,12 +285,13 @@ class LogicielMagasin:
         f.write(str_bd_jeu)
         f.close()
     
-
-    def vente(self):
+    def afficher_inventaire_achat_retour(self):
         for numero, jeu in enumerate(self.inventaire):
             if jeu.nom != "Pochette plastique":
                 print(f"{numero+1}) {jeu}")
-        
+
+    def vente(self):
+        self.afficher_inventaire_achat_retour()
         choix_vente = int(input(f"Article de la vente(1-{len(self.inventaire)-2}): "))
         quantite_vendu = int(input("Quantité vendu: "))
 
@@ -292,7 +299,7 @@ class LogicielMagasin:
         if jeu_vente.inventaire >= quantite_vendu:
             jeu_vente.inventaire -= quantite_vendu
             if jeu_vente.type == "Cartes":
-                jeu_vente.achat(self.inventaire)
+                jeu_vente.achat(self.inventaire, quantite_vendu)
             else:
                 jeu_vente.achat()
             print("Vente réussie")
@@ -301,9 +308,7 @@ class LogicielMagasin:
 
 
     def retour(self):
-        for numero, jeu in enumerate(self.inventaire):
-            print(f"{numero+1}) {jeu}")
-        
+        self.afficher_inventaire_achat_retour()
         choix_retour = int(input(f"Article à retourner(1-{len(self.inventaire)}): "))
         quantite_retour = int(input("Quantité retournée: "))
 

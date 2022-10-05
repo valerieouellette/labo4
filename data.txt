@@ -4,7 +4,7 @@ Uno:3
 Échecs:5
 Dames:4
 Backgammon:3
-Loup-Garou:5
+Loup-Garou:4
 Donjon & Dragon:3
 Mémoire Licornes - enfants:3
 Mémoire télécospique:3
