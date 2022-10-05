@@ -166,6 +166,22 @@ class LogicielMagasin:
         self.telecharger_bd()
         self.quantite_inventaire()
     
+    def definitions(self):
+        return {
+            "Cartes classique" : CartesClassique,
+            "Jok-r-ummy" : JokRUmmy,
+            "Uno" : Uno,
+            "Échecs" : Echecs,
+            "Dames" : Dames,
+            "Backgammon" : Backgammon,
+            "Loup-Garou" : LoupGarou,
+            "Donjon & Dragon" : DonjonDragon,
+            "Mémoire Licornes - enfants" : MemoireEnfant,
+            "Mémoire télécospique" : MemoireTelecospique,
+            "Génies en herbe" : GeniesenHerbes,
+            "Défis Nature" : DefisNature
+        }
+    
     def __str__(self) -> str:
         inventaire_str = ""
         for quantite, jeu in self.inventaire_quantite.items():
@@ -179,42 +195,10 @@ class LogicielMagasin:
             ligne = ligne.split(":")
             nom = ligne[0]
             quantite = int(ligne[1])
-            if nom == "Cartes classique":
-                for i in range(quantite):
-                    self.inventaire.append(CartesClassique())
-            elif nom == "Jok-r-ummy":
-                for i in range(quantite):
-                    self.inventaire.append(JokRUmmy())
-            elif nom == "Uno":
-                for i in range(quantite):
-                    self.inventaire.append(Uno())
-            elif nom == "Échecs":
-                for i in range(quantite):
-                    self.inventaire.append(Echecs())
-            elif nom == "Dames":
-                for i in range(quantite):
-                    self.inventaire.append(Dames())
-            elif nom == "Backgammon":
-                for i in range(quantite):
-                    self.inventaire.append(Backgammon())
-            elif nom == "Loup-Garou":
-                for i in range(quantite):
-                    self.inventaire.append(LoupGarou())
-            elif nom == "Donjon & Dragon":
-                for i in range(quantite):
-                    self.inventaire.append(DonjonDragon())
-            elif nom == "Mémoire Licornes - enfants":
-                for i in range(quantite):
-                    self.inventaire.append(MemoireEnfant())
-            elif nom == "Mémoire télécospique":
-                for i in range(quantite):
-                    self.inventaire.append(MemoireTelecospique())
-            elif nom == "Génies en herbe":
-                for i in range(quantite):
-                    self.inventaire.append(GeniesenHerbes())
-            elif nom == "Défis Nature":
-                for i in range(quantite):
-                    self.inventaire.append(DefisNature())
+            dico_jeu = self.definitions()
+            for nom_cle in dico_jeu.keys():
+                if nom == nom_cle:
+                    self.inventaire.append(dico_jeu[nom_cle]())
         f.close()
     
     def quantite_inventaire(self):
