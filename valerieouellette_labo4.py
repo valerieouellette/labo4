@@ -16,6 +16,7 @@ class Jeu:
     def achat(self):
         pass
 
+
 class JeuCartes(Jeu):
 
     def __init__(self, inventaire):
@@ -51,6 +52,7 @@ class JeuCartes(Jeu):
                         print(f"Malheureusement, il nous reste seulement {article.inventaire} pochettes plastique de cette couleur en stock.")
 
                     article.inventaire = 0
+
 
 class CartesClassique(JeuCartes):
 
@@ -137,11 +139,17 @@ class DonjonDragon(JeuRole):
         self.prix = 45
         self.documentation = "https://donjonetdragon.fr/wp-content/uploads/2022/03/Donjon-et-dragon-PDF-re%CC%80gles.pdf"
 
+
 class JeuMemoire(Jeu):
 
     def __init__(self, inventaire):
         super().__init__(inventaire)
         self.type = "Mémoire"
+        self.activite = ""
+    
+    def achat(self):
+        print(f"Nous vous invitons à nos activités 'Travaillons la mémoire' ayant lieu:\n {self.activite}")
+
 
 class MemoireEnfant(JeuMemoire):
 
@@ -149,6 +157,7 @@ class MemoireEnfant(JeuMemoire):
         super().__init__(inventaire)
         self.nom = "Mémoire Licornes - enfants"
         self.prix = 15
+        self.activite = "Tous les dimanches à 10:00."
 
 class MemoireTelecospique(JeuMemoire):
 
@@ -156,6 +165,7 @@ class MemoireTelecospique(JeuMemoire):
         super().__init__(inventaire)
         self.nom = "Mémoire télécospique"
         self.prix = 35
+        self.activite = "Tous les samedis à 10:00"
 
 class JeuConnaissance(Jeu):
 
@@ -186,6 +196,7 @@ class PochettePlastique:
     
     def __str__(self) -> str:
         return f"Nom: {self.nom}, Couleur: {self.couleur}, Inventaire: {self.inventaire}"
+
 
 class Tournoi:
 
@@ -226,6 +237,7 @@ class Tournoi:
         nb_jour = randint(1,30)
         jour_tournoi = today + timedelta(hours=(24*nb_jour), minutes=0)
         return jour_tournoi
+
 
 class LogicielMagasin:
     
