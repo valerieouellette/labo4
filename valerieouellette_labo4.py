@@ -344,7 +344,7 @@ class LogicielMagasin:
 
     def retour(self):
         self.afficher_inventaire_achat_retour()
-        choix_retour = int(input(f"Article à retourner(1-{len(self.inventaire)}): "))
+        choix_retour = int(input(f"Article à retourner(1-{len(self.inventaire)-2}): "))
         quantite_retour = int(input("Quantité retournée: "))
 
         jeu_retour = self.inventaire[choix_retour-1]

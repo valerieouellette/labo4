@@ -1,5 +1,5 @@
-Cartes classique:2
-Jok-r-ummy:2
+Cartes classique:5
+Jok-r-ummy:4
 Uno:3
 Échecs:5
 Dames:4
@@ -9,6 +9,6 @@ Donjon & Dragon:3
 Mémoire Licornes - enfants:3
 Mémoire télécospique:3
 Génies en herbe:5
-Défis Nature:7
+Défis Nature:8
 Pochette plastique:bleu:20
 Pochette plastique:rouge:25
